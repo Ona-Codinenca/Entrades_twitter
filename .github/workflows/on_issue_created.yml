@@ -1,4 +1,4 @@
-riname: On Issue Created
+name: On Issue Created
 
 on:
   issues:
