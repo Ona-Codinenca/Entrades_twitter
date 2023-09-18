@@ -1,0 +1,37 @@
+name: On Issue Created
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  update-file:
+    runs-on: ubuntu-latest
+
+    steps:   
+    - name: Check out code
+      uses: actions/checkout@v2
+      with:
+        fetch-depth: 0  # This fetches all history
+
+    - name: Update CSV
+      run: |
+        BODY_ESCAPED=$(echo "$GITHUB_EVENT_BODY" | sed 's/"/""/g')  # Escape any double quotes in the body
+        echo "$GITHUB_EVENT_NUMBER,$GITHUB_ACTOR,\"$GITHUB_EVENT_TITLE\",\"$BODY_ESCAPED\"" >> issues.csv
+      env:
+        GITHUB_EVENT_NUMBER: ${{ github.event.issue.number }}
+        GITHUB_ACTOR: ${{ github.actor }}
+        GITHUB_EVENT_TITLE: ${{ github.event.issue.title }}
+        GITHUB_EVENT_BODY: ${{ github.event.issue.body }}
+
+    - name: Commit changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add issues.csv
+        git commit -m "Update issues.csv with new issue #$GITHUB_EVENT_NUMBER"
+        git status
+        git push https://robertgarrigos:${{ secrets.ONA_CODINENCA_TWEETS }}@github.com/robertgarrigos/entrades_twitter.git HEAD:$(git rev-parse --abbrev-ref HEAD)
+
+      env:
+        GITHUB_EVENT_NUMBER: ${{ github.event.issue.number }}
