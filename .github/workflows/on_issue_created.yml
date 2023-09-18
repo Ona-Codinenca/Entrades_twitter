@@ -26,6 +26,6 @@ jobs:
         git config --local user.name "GitHub Action"
         git add issues.txt
         git commit -m "Update issues.txt with new issue #$GITHUB_EVENT_NUMBER"
-        git push origin HEAD:$GITHUB_REF
+        git push
       env:
         GITHUB_EVENT_NUMBER: ${{ github.event.issue.number }}
