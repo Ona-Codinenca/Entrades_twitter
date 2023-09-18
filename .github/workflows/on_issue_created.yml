@@ -1,4 +1,4 @@
-name: On Issue Created
+riname: On Issue Created
 
 on:
   issues:
@@ -29,7 +29,7 @@ jobs:
         git add issues.txt
         git commit -m "Update issues.txt with new issue #$GITHUB_EVENT_NUMBER"
         git status
-        git push https://robertgarrigos:${{ secrets.ONA_CODINENCA_TWEETS }}@github.com/Ona-Codinenca/Entrades_twitter.git HEAD:$(git rev-parse --abbrev-ref HEAD)
+        git push https://robertgarrigos:${{ secrets.ONA_CODINENCA_TWEETS }}@github.com/robertgarrigos/entrades_twitter.git HEAD:$(git rev-parse --abbrev-ref HEAD)
 
       env:
         GITHUB_EVENT_NUMBER: ${{ github.event.issue.number }}
